@@ -245,16 +245,7 @@
   text-align:center;
   }
   
-  #typing-text {
-    font-size: 24px;
-    font-family: monospace;
-    border-right: 2px solid #000;
-    white-space: pre-wrap; /* Preserve both spaces and line breaks */
-    overflow: hidden;
-    animation: typing 2s steps(40, end);
-    color: white; /* Set text color to white */
-}
-
+ 
 
   
   
