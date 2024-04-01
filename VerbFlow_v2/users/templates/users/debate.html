@@ -5,11 +5,11 @@
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
 
    
-        <div id="typing-text"></div>
+        <div id="typing-text">{{initial_text | safe}}</div>
 
     <input type="text" id="input-text" placeholder="Type something...">
 
-    <script>
+    <!-- <script>
         const text = "{{ initial_text | safe }}"; // Text to be typed out
         let index = 0;
     
@@ -30,6 +30,6 @@
     
         // Start the typing animation
         typeWriter();
-    </script>
+    </script> -->
  
 {% endblock content %} 
