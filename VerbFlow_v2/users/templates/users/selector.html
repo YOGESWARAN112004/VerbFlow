@@ -1,0 +1,7 @@
+{% extends 'users/base.html' %}
+{% load static %}
+{% block content %}
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+        <a class="btn" style="color: white; background-color: #fd5e14;" href="{% url 'speech_feedback' %}" id="body-link-row">Speech feedback</a>
+        <a class="btn" style="color: white; background-color: #fd5e14;" href="{% url 'debate' %}" id="body-link-row">debate with ai</a>
+{% endblock content %}

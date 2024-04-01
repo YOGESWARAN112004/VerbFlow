@@ -1,0 +1,35 @@
+ {% extends 'users/base.html' %}
+{% load static %}
+
+{% block content %}
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+
+   
+        <div id="typing-text"></div>
+
+    <input type="text" id="input-text" placeholder="Type something...">
+
+    <script>
+        const text = "{{ initial_text | safe }}"; // Text to be typed out
+        let index = 0;
+    
+        function typeWriter() {
+            if (index < text.length) {
+                const typingText = document.getElementById("typing-text");
+                typingText.innerHTML += text.charAt(index);
+                index++;
+    
+                // Check if the character is a newline character
+                if (text.charAt(index - 1) === '\n') {
+                    typingText.innerHTML += "<br>"; // Add a line break
+                }
+    
+                setTimeout(typeWriter, 100);
+            }
+        }
+    
+        // Start the typing animation
+        typeWriter();
+    </script>
+ 
+{% endblock content %} 

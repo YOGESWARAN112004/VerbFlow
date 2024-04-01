@@ -1,0 +1,13 @@
+{% extends 'users/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+<h1>Upload Speech File</h1>
+    <form action="{% url 'process_audio' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <input type="file" name="audio_file" accept="audio/*" required>
+        <button type="submit" class="btn btn-primary">Upload</button>
+    </form>
+{% endblock %}
