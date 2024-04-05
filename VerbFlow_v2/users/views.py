@@ -25,14 +25,7 @@ def debate_view(request):
         # If not authenticated, set a default username
         username = 'user'
     
-    initial_text = f"(break the dialouge to several lines)user is {username}(it's just a intro ),(u'r speaking to single user) and u'r asking practice debate skill with me and the skills required for debate. and on what topic would u like to practice debate"
-    genai.configure(api_key='AIzaSyCAoMFP7QaUOvVSFAEmqkk_w1HHVmBI0_4')
-
-    model = genai.GenerativeModel('gemini-pro')
-    response = model.generate_content(f"""{initial_text}
-        """)
-    response2 =model.generate_content(f"{response.text} convert it into a single dialouge, dialouge alone no * ")
-    initial_text = response2.text
+    initial_text = f"Hello {username}! Welcome to our Verbflow Debate platform. As an AI designed to engage in various conversations and debates, I'm excited to interact with you. What topics are you particularly interested in discussing or debating today?"
     return render(request, 'users/debate.html', {'initial_text': initial_text})
 
 def debate_txt(request):
