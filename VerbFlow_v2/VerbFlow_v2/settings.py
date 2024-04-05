@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
+import djongo
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -84,8 +85,22 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+    },
+    
+    'mongodb': {
+        'ENGINE': 'djongo',
+        'NAME': 'SpeechFeedback',  # Name of your MongoDB database
+        'ENFORCE_SCHEMA': False,  # Set to False if you want to use MongoDB's schema-less nature
+        'CLIENT': {
+            'host': 'localhost',  # MongoDB host
+            'port': 27017,  # MongoDB port
+            'authSource': "admin",  # MongoDB authentication database
+                  }
+               }
+        }
+DATABASE_ROUTERS = ['users.routers.MongoDBRouter']
+
+# Specify the model for which to use the 'mongodb' database backend
 
 
 # Password validation
@@ -124,16 +139,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = '/users/static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static')
-]
+STATICFILES_DIRS = [r"C:\Users\yoges\Verbflow_Authsys\VerbFlow_v2\users\static"]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"

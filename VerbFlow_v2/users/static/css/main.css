@@ -244,6 +244,9 @@
   .foot-lnk{
   text-align:center;
   }
+<<<<<<< HEAD
+   
+=======
   
  
 
@@ -251,6 +254,7 @@
   
   
   
+>>>>>>> 3f42733b28506a8f83eb1e94a23c5dec8a78a158
   
   @function remy($value) {
   @return ($value / 16px) * 1rem;
