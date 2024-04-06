@@ -1,0 +1,6 @@
+django
+django-crispy-forms
+crispy-bootstrap5
+librosa
+assemblyai
+google.generativeai
