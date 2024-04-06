@@ -139,15 +139,20 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATIC_URL = '/users/static/'
+STATIC_URL = '/static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-STATICFILES_DIRS = [r"C:\Users\yoges\Verbflow_Authsys\VerbFlow_v2\users\static"]
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+AUDIO_FILES_DIR = os.path.join(BASE_DIR, 'audio_files')
 
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'users', 'static'),
+]
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 

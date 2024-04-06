@@ -3,6 +3,9 @@
 {% load static %}
 
 {% block content %}
+<div> <h2>see your previous seesion here </h2>
+    <a class="btn" style="color: white; background-color: #fd5e14;" href="{% url 'user_session_list' %}" id="body-link-row"> view</a>
+</div>
 <h1>Upload Speech File</h1>
     <form action="{% url 'process_audio' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}

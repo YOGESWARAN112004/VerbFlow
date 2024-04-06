@@ -244,18 +244,12 @@
   .foot-lnk{
   text-align:center;
   }
-<<<<<<< HEAD
-   
-=======
-  
- 
-
-  
-  
-  
-  
->>>>>>> 3f42733b28506a8f83eb1e94a23c5dec8a78a158
-  
+  .half-width-div {
+    width: 50%;
+    margin: 0 auto; /* Center the div horizontally */
+    background-color: lightgray; /* Just for visualization */
+    padding: 20px; /* Optional padding */
+}
   @function remy($value) {
   @return ($value / 16px) * 1rem;
   }

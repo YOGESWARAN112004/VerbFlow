@@ -10,7 +10,17 @@ import csv
 import google.generativeai as genai
 import os
 from .models import UserSession
+from django.contrib.auth.models import User
+from .models import UserSession  # Import your UserSession model
 
+def user_session_list(request):
+    username = request.user.username
+
+    # Retrieve all UserSession objects from the database
+    user_sessions = UserSession.objects.filter(user_id=username)
+
+    # Pass the user_sessions data to the template for rendering
+    return render(request, 'users/user_session_list.html', {'user_sessions': user_sessions})
 
 def selector_view(request):
     return render(request, 'users/selector.html')
@@ -217,20 +227,13 @@ def process_audio(request):
             """)
             response2 =model.generate_content(f"{response.text} convert it into a single dialouge ")
             output_string = response.text
-            # import pyttsx3
+            username = request.user.username
 
-            # def text_to_speech(text):
-            #     engine = pyttsx3.init()
-            #     engine.say(text)
-            #     engine.runAndWait()
-            # text_to_speech(response2.text)        
-                    # Return the output as a response
-            user_id = request.session.session_key
-
+         
         # Save the uploaded files and text data to the database
             try:
                 # Assuming you have already defined user_id, transcript_text, and response_text
-                user_session = UserSession.objects.create(user_id=user_id, audio_file=audio_file, audiotext=transcript.text, feedbacktext=response.text)
+                user_session = UserSession.objects.create(user_id=username, audio_file=audio_file, audiotext=transcript.text, feedbacktext=response.text)
                 user_session.save()
                 # Print success message
                 print("User session saved successfully!")
