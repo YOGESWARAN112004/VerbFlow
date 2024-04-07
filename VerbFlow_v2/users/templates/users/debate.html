@@ -5,9 +5,19 @@
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
 
    
-        <div id="typing-text">{{initial_text | safe}}</div>
+        <div style="margin: 5%;">{{initial_text | safe}}</div>
 
-    <input type="text" id="input-text" placeholder="Type something...">
+    <!-- Centered buttons -->
+    <div class = 'center_align'>
+        <input type="text" id="input-text" placeholder="Enter your topic here.">
+
+        
+        <a class="btn" style="color: white; background-color: #fd5e14; margin-right: 20px; margin-top: 50px;" href="{% url 'debate_page' %}">debate concept 1</a>
+        
+        <a class="btn" style="color: white; background-color: #fd5e14; margin-right: 20px; margin-top: 50px;" href="#">debate concept 2</a>
+        
+        <a class="btn" style="color: white; background-color: #fd5e14; margin-right: 20px; margin-top: 50px;" href="#">debate concept 3</a>
+    </div>
 
     <!-- <script>
         const text = "{{ initial_text | safe }}"; // Text to be typed out
@@ -31,5 +41,5 @@
         // Start the typing animation
         typeWriter();
     </script> -->
- 
+    
 {% endblock content %} 

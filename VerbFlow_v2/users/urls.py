@@ -16,4 +16,5 @@ urlpatterns = [
     path('debate_txt/', views.debate_txt, name='debate_txt'),  # URL pattern for processing audio
     path('process/', views.process_audio, name='process_audio'),  # URL pattern for processing audio
     path('user-sessions/',views.user_session_list, name='user_session_list'),
+    path('debate_page/',views.debate_page, name='debate_page'),
 ]

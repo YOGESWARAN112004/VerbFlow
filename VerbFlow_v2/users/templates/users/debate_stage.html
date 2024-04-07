@@ -1,0 +1,50 @@
+{% extends 'users/base.html' %}
+{% load static %}
+{% block content %}
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    
+    <h1>Debate between {{username}} and AI</h1>
+
+    <div id="message-container">
+        <!-- Messages will be displayed here -->
+    </div>
+
+    <div id="input-container">
+        <input type="text" id="user-input" placeholder="Your message...">
+        <button id="send-button" onclick="sendMessage()">Send</button>
+    </div>
+
+    <script>
+        function sendMessage() {
+            var userInput = document.getElementById("user-input").value;
+            var messageContainer = document.getElementById("message-container");
+
+            // Create new message div for user
+            var userMessageDiv = document.createElement("div");
+            userMessageDiv.classList.add("user-message");
+            userMessageDiv.innerHTML = "<h2>{{username}}:</h2><p>" + userInput + "</p>";
+            messageContainer.appendChild(userMessageDiv);
+
+            // Clear user input field
+            document.getElementById("user-input").value = "";
+
+            // Simulate AI's response (this can be replaced with actual AI logic)
+            var aiResponse = "I am an AI. I don't have feelings, but I can provide information.";
+
+            // Create new message div for AI
+            var aiMessageDiv = document.createElement("div");
+            aiMessageDiv.classList.add("ai-message");
+            aiMessageDiv.innerHTML = "<h2>AI:</h2><p>" + aiResponse + "</p>";
+            messageContainer.appendChild(aiMessageDiv);
+
+            // Scroll to the bottom of the page to show the latest message
+            window.scrollTo(0,document.body.scrollHeight);
+        }
+        // Function to handle Enter key press
+        document.addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                sendMessage(); // Call sendMessage() function when Enter key is pressed
+            }
+        });
+    </script>
+{% endblock content %}

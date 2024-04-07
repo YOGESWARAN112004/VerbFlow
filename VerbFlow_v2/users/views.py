@@ -13,6 +13,10 @@ from .models import UserSession
 from django.contrib.auth.models import User
 from .models import UserSession  # Import your UserSession model
 
+def debate_page(request):
+    username = request.user.username
+    return render(request, 'users/debate_stage.html', {'username': username})
+
 def user_session_list(request):
     username = request.user.username
 

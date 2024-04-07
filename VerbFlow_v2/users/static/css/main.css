@@ -394,3 +394,67 @@
     text-decoration: none;
     border-radius: 9px;
   }
+  .fcontainer {
+    display: flex;
+    justify-content: center; /* Horizontally center the flex container */
+    align-items: center; /* Vertically center the flex container */
+    height: 100vh; /* Full viewport height */
+  }
+  
+  .center_align{
+    display: flex;
+    align-items: center; /* Vertically center the items */
+    justify-content: center;
+    flex-direction: column;
+    justify-content: space-between; /* Distribute space between items */
+    height: 150px; /* Set a height for demonstration */
+    margin-top: 200;
+  }
+  /* Style for AI's messages */
+  .ai-message {
+    float: left;
+    clear: both;
+    width: 35%; /* Adjust width as needed */
+    padding: 10px;
+    margin: 10px;
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    margin-left: 3%;
+}
+
+/* Style for User's messages */
+.user-message {
+    float: right;
+    clear: both;
+    width: 35%; /* Adjust width as needed */
+    padding: 10px;
+    margin: 10px;
+    background-color: #e6f7ff;
+    border-radius: 10px;
+    margin-right: 3%;
+}
+
+/* Style for input container */
+#input-container {
+    clear: both;
+    margin-top: 20px;
+}
+
+/* Style for user input */
+#user-input {
+    width: calc(100% - 70px); /* Adjust width as needed */
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 5px;
+}
+
+/* Style for send button */
+#send-button {
+    padding: 5px 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+}
