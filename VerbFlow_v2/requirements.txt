@@ -4,3 +4,5 @@ crispy-bootstrap5
 librosa
 assemblyai
 google.generativeai
+djongo
+pytz
