@@ -2,95 +2,92 @@
 {% load static %}
 {% block content %}
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
-    
-    <h1>Debate between {{username}} and AI</h1>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    {% csrf_token %}
+    <h1>Debate between User and AI</h1>
 
-    <div id="message-container">
+    <div id="topic-prompt">
+        <label for="topic">Choose your stance:</label>
+        <select id="topic">
+            <option value="for">For</option>
+            <option value="against">Against</option>
+        </select>
+        <button onclick="startDebate()">Start Debate</button>
+    </div>
+
+    <div id="message-container" class="message-container">
         <!-- Messages will be displayed here -->
     </div>
 
-    <div id="input-container">
+    <div id="input-container" class="message-container">
         <input type="text" id="user-input" placeholder="Your message...">
         <button id="send-button" onclick="sendMessage()">Send</button>
-        <button id="start-audio-button" onclick="startSpeechRecognition()">Start Audio</button>
-        <button id="stop-audio-button" onclick="stopSpeechRecognition()" style="display: none;">Stop Audio</button>
     </div>
 
     <script>
-        var recognition;
+        // Set up Axios with CSRF token
+        axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
+        axios.defaults.xsrfCookieName = "csrftoken";
 
-        // Function to send text message
-        function sendMessage() {
+        // Function to handle sending message
+        async function sendMessage() {
             var userInput = document.getElementById("user-input").value;
-            sendMessageToAI(userInput);
-        }
-
-        // Function to send audio message
-        function sendAudioMessage(audioText) {
-            sendMessageToAI(audioText);
-        }
-
-        // Function to send message to AI
-        function sendMessageToAI(message) {
             var messageContainer = document.getElementById("message-container");
 
-            // Create new message div for user
-            var userMessageDiv = document.createElement("div");
-            userMessageDiv.classList.add("user-message");
-            userMessageDiv.innerHTML = "<h2>{{username}}:</h2><p>" + message + "</p>";
-            messageContainer.appendChild(userMessageDiv);
+            // Display user's message
+            messageContainer.innerHTML += "<div class='user-message'><h2>User:</h2><p>" + userInput + "</p></div>";
+
+            try {
+                // Send user's message to Django backend using Axios
+                var response = await axios.post("/handle_message/", { message: userInput });
+
+                // Scroll to the bottom of the page to show the latest message
+                window.scrollTo(0, document.body.scrollHeight);
+            } catch (error) {
+                console.error("Error:", error);
+            }
 
             // Clear user input field
             document.getElementById("user-input").value = "";
-
-            // Simulate AI's response (this can be replaced with actual AI logic)
-            var aiResponse = "I am an AI. I don't have feelings, but I can provide information.";
-
-            // Create new message div for AI
-            var aiMessageDiv = document.createElement("div");
-            aiMessageDiv.classList.add("ai-message");
-            aiMessageDiv.innerHTML = "<h2>AI:</h2><p>" + aiResponse + "</p>";
-            messageContainer.appendChild(aiMessageDiv);
-
-            // Scroll to the bottom of the page to show the latest message
-            window.scrollTo(0,document.body.scrollHeight);
         }
 
-        // Function to handle Enter key press
-        document.addEventListener("keypress", function(event) {
+        // Function to start the debate
+        function startDebate() {
+            var topic = document.getElementById("topic").value;
+            var messageContainer = document.getElementById("message-container");
+            var inputContainer = document.getElementById("input-container");
+
+            // Show message containers
+            messageContainer.style.display = "block";
+            inputContainer.style.display = "block";
+
+            // Add initial messages based on topic
+            var initialMessage;
+            if (topic === "for") {
+                initialMessage = "I am speaking for the topic.";
+            } else if (topic === "against") {
+                initialMessage = "I am speaking against the topic.";
+            }
+
+            // Display initial messages
+            messageContainer.innerHTML += "<div class='ai-message'><h2>AI:</h2><p>" + initialMessage + "</p></div>";
+            messageContainer.innerHTML += "<div class='user-message'><h2>User:</h2><p>Please begin.</p></div>";
+        }
+
+        // Function to handle Enter key press event in the input field
+        document.getElementById("user-input").addEventListener("keypress", function(event) {
             if (event.key === "Enter") {
-                sendMessage(); // Call sendMessage() function when Enter key is pressed
+                sendMessage(); // Call sendMessage() when Enter key is pressed
+                var messageContainer = document.getElementById("message-container");
+                
+
+                messageContainer.innerHTML += "<div class='ai-message'><h2>AI:</h2><p>" + {{response.data.ai_response}} + "</p></div>";
+
+
+                
+        
+                
             }
         });
-
-        // Function to start speech recognition
-        function startSpeechRecognition() {
-            recognition = new webkitSpeechRecognition() || new SpeechRecognition(); // For cross-browser support
-            recognition.lang = "en-US"; // Set language to English (United States)
-            recognition.continuous = true;
-            recognition.interimResults = false; // Set this to true if you want interim results
-            recognition.maxAlternatives = 1;
-            recognition.onresult = function(event) {
-                var audioText = event.results[0][0].transcript;
-                sendAudioMessage(audioText);
-            }
-            recognition.start();
-
-            // Toggle button visibility
-            document.getElementById("start-audio-button").style.display = "none";
-            document.getElementById("stop-audio-button").style.display = "inline-block";
-        }
-
-        // Function to stop speech recognition
-        function stopSpeechRecognition() {
-            if (recognition) {
-                recognition.stop();
-                recognition = null; // Reset recognition object
-            }
-
-            // Toggle button visibility
-            document.getElementById("start-audio-button").style.display = "inline-block";
-            document.getElementById("stop-audio-button").style.display = "none";
-        }
     </script>
 {% endblock content %}

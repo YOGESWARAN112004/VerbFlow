@@ -17,4 +17,6 @@ urlpatterns = [
     path('process/', views.process_audio, name='process_audio'),  # URL pattern for processing audio
     path('user-sessions/',views.user_session_list, name='user_session_list'),
     path('debate_page/',views.debate_page, name='debate_page'),
+    path('handle_message/',views.handle_message, name='handle_message'),  # Add this URL mapping
+
 ]

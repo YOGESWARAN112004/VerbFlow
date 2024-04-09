@@ -1,45 +1,23 @@
- {% extends 'users/base.html' %}
+{% extends 'users/base.html' %}
 {% load static %}
 
 {% block content %}
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
-
-   
-        <div style="margin: 5%;">{{initial_text | safe}}</div>
-
-    <!-- Centered buttons -->
-    <div class = 'center_align'>
-        <input type="text" id="input-text" placeholder="Enter your topic here.">
-
-        
-        <a class="btn" style="color: white; background-color: #fd5e14; margin-right: 20px; margin-top: 50px;" href="{% url 'debate_page' %}">debate concept 1</a>
-        
-        <a class="btn" style="color: white; background-color: #fd5e14; margin-right: 20px; margin-top: 50px;" href="#">debate concept 2</a>
-        
-        <a class="btn" style="color: white; background-color: #fd5e14; margin-right: 20px; margin-top: 50px;" href="#">debate concept 3</a>
+        {{initial_text}}
+    <!-- Input field for typing the topic -->
+    <div style="margin: 5%;">
+        <input type="text" id="topic-input" placeholder="Enter your topic here and press Enter">
     </div>
 
-    <!-- <script>
-        const text = "{{ initial_text | safe }}"; // Text to be typed out
-        let index = 0;
-    
-        function typeWriter() {https://github.com/YOGESWARAN112004/VerbFlow.git
-            if (index < text.length) {
-                const typingText = document.getElementById("typing-text");
-                typingText.innerHTML += text.charAt(index);
-                index++;
-    
-                // Check if the character is a newline character
-                if (text.charAt(index - 1) === '\n') {
-                    typingText.innerHTML += "<br>"; // Add a line break
-                }
-    
-                setTimeout(typeWriter, 100);
+    <!-- JavaScript to capture Enter key press -->
+    <script>
+        document.getElementById("topic-input").addEventListener("keypress", function(event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                var topic = document.getElementById("topic-input").value;
+                localStorage.setItem("topic", topic);
+                window.location.href = "{% url 'debate_page' %}?topic=" + encodeURIComponent(topic);
             }
-        }
-    
-        // Start the typing animation
-        typeWriter();
-    </script> -->
-    
-{% endblock content %} 
+        });
+    </script>
+{% endblock %}

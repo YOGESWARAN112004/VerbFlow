@@ -7,15 +7,57 @@ import assemblyai as aai
 import librosa
 import numpy as np
 import csv
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
 import google.generativeai as genai
 import os
 from .models import UserSession
 from django.contrib.auth.models import User
-from .models import UserSession  # Import your UserSession model
+from .models import UserSession 
+from .models import DebateConversations# Import your UserSession model
 
+def handle_message(request):
+    if request.method == 'POST':
+        user_message = request.POST.get('message')
+        
+        # Store user message in the database
+        user_res = DebateConversations.objects.create(session_ID=request.session.session_key,
+                                           user_id=request.user.id,
+                                           sender='User',
+                                           message=user_message)
+        user_res.save()
+        
+
+        # Retrieve previous AI response
+        previous_ai_response = DebateConversations.objects.filter( user_id=request.user.id,sender='AI').first()
+
+        # Compare user message with previous AI response
+        if previous_ai_response:
+            # Perform comparison logic here and generate appropriate response
+            ai_response = "This is an appropriate response based on the comparison."
+        else:
+            ai_response = "This is the first AI response."
+  
+        # Store AI response in the database
+        Conversations =  DebateConversations.objects.create(session_ID=request.session.session_key,
+                                           user_id=request.user.id,
+                                           sender='AI',
+                                           message=ai_response)
+        Conversations.save()
+
+        ai_response = "This is the AI response."
+
+
+        return JsonResponse({'ai_response': ai_response})
+    else:
+        ai_response = "This is the AI response."
+        return JsonResponse({'ai_response': ai_response})
 def debate_page(request):
     username = request.user.username
-    return render(request, 'users/debate_stage.html', {'username': username})
+    topic = request.GET.get('topic', '')  # Get the topic from the query parameters
+    print(topic)
+    return render(request, 'users/debate_stage.html', {'username': username, 'topic': topic})
+
 
 def user_session_list(request):
     username = request.user.username
@@ -31,24 +73,21 @@ def selector_view(request):
 
 def speech_feedback_view(request):
     return render(request, 'users/speechfeedback.html')
-
 def debate_view(request):
-        # Check if the user is authenticated
-    if request.user.is_authenticated:
-        # If authenticated, get the username
-        username = request.user.username
-    else:
-        # If not authenticated, set a default username
-        username = 'user'
-    
-    initial_text = f"(break the dialouge to several lines)user is {username}(it's just a intro ),(u'r speaking to single user) and u'r asking practice debate skill with me and the skills required for debate. and on what topic would u like to practice debate"
-    genai.configure(api_key='AIzaSyCAoMFP7QaUOvVSFAEmqkk_w1HHVmBI0_4')
+    # Get the username
+    username = request.user.username
 
+    # Construct the initial text for the debate
+    initial_text = f"(break the dialogue to several lines) User is {username} (it's just an intro), (u'r speaking to single user) and u'r asking to practice debate skill with me and the skills required for debate. What topic would you like to practice debate on?"
+
+    # Configure and use the Generative AI model
+    genai.configure(api_key='AIzaSyCAoMFP7QaUOvVSFAEmqkk_w1HHVmBI0_4')
     model = genai.GenerativeModel('gemini-pro')
-    response = model.generate_content(f"""{initial_text}
-        """)
-    response2 =model.generate_content(f"{response.text} convert it into a single dialouge, dialouge alone no * ")
+    response = model.generate_content(initial_text)
+    response2 = model.generate_content(f"{response.text} convert it into a single dialogue, dialogue alone no * ")
     initial_text = response2.text
+
+    # Render the debate view template with the initial text
     return render(request, 'users/debate.html', {'initial_text': initial_text})
 
 def debate_txt(request):

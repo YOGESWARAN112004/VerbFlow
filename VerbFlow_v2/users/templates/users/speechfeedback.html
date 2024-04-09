@@ -25,29 +25,44 @@
     </form>
     
     <!-- Loading animation while converting speech to text -->
+    <div class="loading-bar" id="loading" style=" display: none;">
+        <div class="loading-part" id="part1" style="width: 0%;"></div>
+    </div>
+
     <div id="loadingText" style="display: none; color: white;">Converting speech to text...</div>
     
     <!-- Loading animation while generating feedback -->
     <div id="loadingFeedback" style="display: none;  color: white;">Generating feedback...</div>
     
     <script>
+        function updateLoadingPart(partId, width) {
+            document.getElementById(partId).style.width = width + '%';
+        }
     // Reference the form element
     const uploadForm = document.getElementById("uploadForm");
     
     // Reference the loading animations
     const loadingText = document.getElementById("loadingText");
     const loadingFeedback = document.getElementById("loadingFeedback");
+    const loading = document.getElementById("loading");
 
     // Add event listener to the form submission
     uploadForm.addEventListener("submit", function(event) {
+        loading.style.display = "block";
+
         // Display the loading animation for converting speech to text
         loadingText.style.display = "block";
+        // commmand to show 50% of loading bar
+        updateLoadingPart('part1', 50);
         
         // Use setTimeout to delay showing the second loading animation (simulating processing time)
         setTimeout(function() {
             // Display the loading animation for generating feedback
             loadingFeedback.style.display = "block";
+            // command to show 100% of loading bar
+            updateLoadingPart('part1', 100);
+
         }, 1000); // Adjust the delay time (in milliseconds) as needed
     });
     </script>
-{% endblock %}
+{% endblock %}

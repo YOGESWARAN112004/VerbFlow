@@ -458,3 +458,22 @@
     color: white;
     cursor: pointer;
 }
+.loading-bar {
+  width: 90%;
+  width: 80vw;
+  height: 30px;
+  background-color: #f1f1f1;
+  border-radius: 5px;
+  position: relative;
+  margin: 50px auto;
+}
+
+.loading-part {
+  height: 100%;
+  background-color: #3498db;
+  border-radius: 5px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: width 0.5s ease;
+}
