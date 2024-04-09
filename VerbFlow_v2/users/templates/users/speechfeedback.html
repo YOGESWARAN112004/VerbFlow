@@ -3,14 +3,51 @@
 {% load static %}
 
 {% block content %}
-<div> <h2>see your previous seesion here </h2>
-    <a class="btn" style="color: white; background-color: #fd5e14;" href="{% url 'user_session_list' %}" id="body-link-row"> view</a>
+<div> <h2>See your previous session here </h2>
+    <a class="btn" style="color: white; background-color: #fd5e14;" href="{% url 'user_session_list' %}" id="body-link-row">View</a>
 </div>
 <h1>Upload Speech File</h1>
-    <form action="{% url 'process_audio' %}" method="post" enctype="multipart/form-data">
+    <form id="uploadForm" action="{% url 'process_audio' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form|crispy }}
         <input type="file" name="audio_file" accept="audio/*" required>
+        
+        <!-- Dropdown menu for selecting feedback type -->
+        <label for="feedback_type">Select Feedback Type:</label>
+        <select name="feedback_type" id="feedback_type" required>
+            <option value="coherence_feedback">coherence_feedback</option>
+            <option value="content_feedback"> content_feedback</option>
+            <option value="delivery"> delivery</option>
+            <!-- Add more options as needed -->
+        </select>
+        
         <button type="submit" class="btn btn-primary">Upload</button>
     </form>
+    
+    <!-- Loading animation while converting speech to text -->
+    <div id="loadingText" style="display: none; color: white;">Converting speech to text...</div>
+    
+    <!-- Loading animation while generating feedback -->
+    <div id="loadingFeedback" style="display: none;  color: white;">Generating feedback...</div>
+    
+    <script>
+    // Reference the form element
+    const uploadForm = document.getElementById("uploadForm");
+    
+    // Reference the loading animations
+    const loadingText = document.getElementById("loadingText");
+    const loadingFeedback = document.getElementById("loadingFeedback");
+
+    // Add event listener to the form submission
+    uploadForm.addEventListener("submit", function(event) {
+        // Display the loading animation for converting speech to text
+        loadingText.style.display = "block";
+        
+        // Use setTimeout to delay showing the second loading animation (simulating processing time)
+        setTimeout(function() {
+            // Display the loading animation for generating feedback
+            loadingFeedback.style.display = "block";
+        }, 1000); // Adjust the delay time (in milliseconds) as needed
+    });
+    </script>
 {% endblock %}

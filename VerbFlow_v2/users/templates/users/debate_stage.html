@@ -12,17 +12,32 @@
     <div id="input-container">
         <input type="text" id="user-input" placeholder="Your message...">
         <button id="send-button" onclick="sendMessage()">Send</button>
+        <button id="start-audio-button" onclick="startSpeechRecognition()">Start Audio</button>
+        <button id="stop-audio-button" onclick="stopSpeechRecognition()" style="display: none;">Stop Audio</button>
     </div>
 
     <script>
+        var recognition;
+
+        // Function to send text message
         function sendMessage() {
             var userInput = document.getElementById("user-input").value;
+            sendMessageToAI(userInput);
+        }
+
+        // Function to send audio message
+        function sendAudioMessage(audioText) {
+            sendMessageToAI(audioText);
+        }
+
+        // Function to send message to AI
+        function sendMessageToAI(message) {
             var messageContainer = document.getElementById("message-container");
 
             // Create new message div for user
             var userMessageDiv = document.createElement("div");
             userMessageDiv.classList.add("user-message");
-            userMessageDiv.innerHTML = "<h2>{{username}}:</h2><p>" + userInput + "</p>";
+            userMessageDiv.innerHTML = "<h2>{{username}}:</h2><p>" + message + "</p>";
             messageContainer.appendChild(userMessageDiv);
 
             // Clear user input field
@@ -40,11 +55,42 @@
             // Scroll to the bottom of the page to show the latest message
             window.scrollTo(0,document.body.scrollHeight);
         }
+
         // Function to handle Enter key press
         document.addEventListener("keypress", function(event) {
             if (event.key === "Enter") {
                 sendMessage(); // Call sendMessage() function when Enter key is pressed
             }
         });
+
+        // Function to start speech recognition
+        function startSpeechRecognition() {
+            recognition = new webkitSpeechRecognition() || new SpeechRecognition(); // For cross-browser support
+            recognition.lang = "en-US"; // Set language to English (United States)
+            recognition.continuous = true;
+            recognition.interimResults = false; // Set this to true if you want interim results
+            recognition.maxAlternatives = 1;
+            recognition.onresult = function(event) {
+                var audioText = event.results[0][0].transcript;
+                sendAudioMessage(audioText);
+            }
+            recognition.start();
+
+            // Toggle button visibility
+            document.getElementById("start-audio-button").style.display = "none";
+            document.getElementById("stop-audio-button").style.display = "inline-block";
+        }
+
+        // Function to stop speech recognition
+        function stopSpeechRecognition() {
+            if (recognition) {
+                recognition.stop();
+                recognition = null; // Reset recognition object
+            }
+
+            // Toggle button visibility
+            document.getElementById("start-audio-button").style.display = "inline-block";
+            document.getElementById("stop-audio-button").style.display = "none";
+        }
     </script>
 {% endblock content %}

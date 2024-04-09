@@ -135,32 +135,30 @@ def csv_to_string(file_path):
             
             # Return the resulting string
             return result
-prompt = """Imagine you've just attended a speech or presentation. Reflecting on the experience, provide feedback to the speaker, encompassing various aspects:
-
-Content Clarity: Was the main message clear and well-organized? Did you understand the key points easily?
-
-Engagement Level: How engaging was the speaker? Did they capture your attention throughout the speech?
-
-Delivery Style: Comment on the speaker's delivery style. Did they appear confident and authentic? How effective was their body language and eye contact?
-
-Vocal Variety: Reflect on the speaker's use of vocal variety. Did they vary their pitch, pace, and volume appropriately?
-
-Timing and Pace: Consider the pace of the speech. Was it too fast or too slow? Were pauses used effectively?
-
-Language and Vocabulary: Evaluate the language used. Was it appropriate for the audience? Did it convey the intended message effectively?
-
-Relevance and Depth: Assess the depth of content. Did the speech provide new insights or perspectives? Did it address the audience's needs or interests?
-
-Visual Aids (if applicable): If visual aids were used, evaluate their effectiveness. Did they enhance understanding and engagement?
-
-Overall Impact: Reflect on the overall impact of the speech. Did it leave a lasting impression? Did it inspire action or reflection?
-
-Constructive Criticism(only if needed): Provide specific suggestions for improvement. Highlight areas where the speaker could enhance their delivery, content, or overall effectiveness."""
-
+prompts = {"content_feedback":"""Imagine you've just listened to a speech or presentation. Provide constructive
+          feedback on the substance and relevance of the content presented. Consider aspects such as the accuracy
+          of information, depth of research, quality of supporting evidence, and effectiveness of examples or anecdotes.
+          Your feedback should help the speaker understand how well their message resonated with the audience and 
+          suggest areas for improvement.""",
+          "coherence_feedback":"""After listening to a speech or presentation, assess the organization and logical
+          flow of ideas presented. Provide constructive feedback on how well the speaker transitioned between points,
+          maintained a coherent structure, and connected ideas smoothly. Consider the clarity of transitions, the
+          logical progression of ideas, and the overall coherence of the speech. Your feedback should help the speaker
+          improve the clarity and effectiveness of their communication.""",
+          "delivery":"""Reflecting on a recent speech or presentation you've observed, provide feedback on the delivery
+          style of the speaker. Evaluate aspects such as vocal variety, pacing, and emphasis. Consider elements like 
+          volume, pitch, intonation, and the use of pauses for emphasis or dramatic effect. Your feedback should offer
+          insights into how the speaker can enhance their delivery to engage the audience more effectively and convey
+          their message with greater impact"""}
 def process_audio(request):
     if request.user.is_authenticated:
 
         if request.method == 'POST' and request.FILES.get('audio_file'):
+            
+            feedback_type = request.POST.get('feedback_type')
+            prompt =prompts[feedback_type]
+            
+
             # Get the uploaded audio file
             audio_file = request.FILES['audio_file']
             temporary_file_path = audio_file.temporary_file_path()
@@ -226,7 +224,7 @@ def process_audio(request):
             genai.configure(api_key='AIzaSyCAoMFP7QaUOvVSFAEmqkk_w1HHVmBI0_4')
 
             model = genai.GenerativeModel('gemini-pro')
-            response = model.generate_content(f"""{transcript.text}.{prompt}/n{pace_string}
+            response = model.generate_content(f"""{prompt} below is the speechtext {transcript.text}/n{pace_string}
             /n{pitch_string}
             """)
             response2 =model.generate_content(f"{response.text} convert it into a single dialouge ")
