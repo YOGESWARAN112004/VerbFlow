@@ -81,7 +81,7 @@ def debate_view(request):
     initial_text = f"(break the dialogue to several lines) User is {username} (it's just an intro), (u'r speaking to single user) and u'r asking to practice debate skill with me and the skills required for debate. What topic would you like to practice debate on?"
 
     # Configure and use the Generative AI model
-    genai.configure(api_key='AIzaSyCAoMFP7QaUOvVSFAEmqkk_w1HHVmBI0_4')
+    genai.configure(api_key='your api key')
     model = genai.GenerativeModel('gemini-pro')
     response = model.generate_content(initial_text)
     response2 = model.generate_content(f"{response.text} convert it into a single dialogue, dialogue alone no * ")
@@ -127,7 +127,7 @@ def process_audio(request):
             temporary_file_path = audio_file.temporary_file_path()
          
 
-            genai.configure(api_key="AIzaSyDNXOw7CIcBb7zo7ILsIdQMwbaEOK8BoQQ")
+            genai.configure(api_key="your api key")
                         
             model = genai.GenerativeModel(model_name="gemini-1.5-pro-latest")
             my_filename = temporary_file_path # @param {type:"string"}
